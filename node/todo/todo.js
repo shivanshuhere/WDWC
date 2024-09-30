@@ -50,6 +50,10 @@ const delTask =(index)=>{
 
 }
 
+const delAllTask = () =>{
+    let tasks = []
+    saveTask(tasks)
+}
 
 
 if(command == "add"){
@@ -60,6 +64,10 @@ else if(command == "list"){
 }
 else if(command == "del"){
     delTask(parseInt(arg)-1)
+}
+
+else if(command == "delAll"){
+    delAllTask()
 }
 
 else {
