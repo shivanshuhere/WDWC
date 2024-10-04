@@ -18,6 +18,7 @@ taskArr.forEach((task) => {
 addBtn.addEventListener("click", () => {
   let task = taskInput.value;
   taskInput.value = "";
+  if (task == "") return;
   //   console.log(task);
   let id = Date.now();
   taskArr.push({
@@ -33,6 +34,12 @@ addBtn.addEventListener("click", () => {
           </div>`;
 });
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+document.querySelectorAll("button").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const delTask = e.target.parentElement;
+    taskArr = taskArr.filter((task) => task.id != delTask.id);
+    saveTask();
+    delTask.remove();
+  });
 });
