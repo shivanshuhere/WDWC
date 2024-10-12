@@ -38,11 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderCart() {
-    cartItems.innerText = "";
     let totalPrice = 0;
+    cartItems.innerHTML = "";
     if (cart.length > 0) {
       cartTotal.classList.remove("hidden");
-      cart.forEach((item, index) => {
+      emptyCartMsg.classList.add("hidden");
+
+      cart.forEach((item) => {
         const { id, name, price } = item;
         const newItem = document.createElement("div");
         newItem.innerHTML = `<span>${name} - $${price}</span> <button data-id="${id}">Remove</button>`;
@@ -51,8 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
         totalPrice += price;
       });
       totalPriceDiv.innerHTML = `$${totalPrice.toFixed(2)}`;
-    } else {
-      emptyCartMsg.classList.add("hidden");
+    }
+    if (cart.length == 0) {
+      cartItems.innerText = emptyCartMsg.innerHTML;
+      totalPriceDiv.innerHTML = `$0.00`;
       cartTotal.classList.add("hidden");
     }
   }
@@ -69,4 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
     cart.splice(itemIndex, 1);
     renderCart();
   }
+
+  checkoutBtn.addEventListener("click", () => {
+    alert("Checkout Successfully!");
+    cart.length = 0;
+    renderCart();
+  });
 });
