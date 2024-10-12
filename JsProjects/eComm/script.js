@@ -1,74 +1,72 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const prodList = document.querySelector("#product-list");
-  const emptyCartMsg = document.querySelector("#empty-cart");
-  const cartItem = document.querySelector("#cart-items");
-  const cardTotoal = document.querySelector("#cart-total");
-  const cardTotoalPrice = document.querySelector("#total-price");
+  const productList = document.getElementById("product-list");
+  const cartItems = document.getElementById("cart-items");
+  const emptyCartMsg = document.getElementById("empty-cart");
+  const cartTotal = document.getElementById("cart-total");
+  const totalPriceDiv = document.getElementById("total-price");
+  const checkoutBtn = document.getElementById("checkout-btn");
 
   const products = [
-    {
-      id: 1,
-      name: "product 1",
-      price: 19.1293,
-    },
-    {
-      id: 2,
-      name: "product 2",
-      price: 39,
-    },
-    {
-      id: 3,
-      name: "product 3",
-      price: 42,
-    },
+    { id: 1, name: "product 1", price: 31.432 },
+    { id: 2, name: "product 2", price: 31.432 },
+    { id: 3, name: "product 3", price: 31.432 },
+    { id: 4, name: "product 4", price: 31.432 },
   ];
 
   const cart = [];
 
-  products.forEach((prod) => {
-    const { name, price, id } = prod;
-    let newProd = document.createElement("div");
-    newProd.innerHTML = `<span>${name} - $${price.toFixed(2)}
-    </span><button data-id="${id}">Add to cart</button>`;
-    newProd.classList.add("product");
-    newProd.setAttribute("price-data", price);
-    prodList.appendChild(newProd);
+  // render products
+  products.forEach((prodcut) => {
+    const { id, name, price } = prodcut;
+    const newProduct = document.createElement("div");
+    newProduct.innerHTML = `<span>${name} - $${price}</span><button data-id="${id}">Add to Cart</button>`;
+    newProduct.classList.add("product");
+    productList.appendChild(newProduct);
   });
 
-  prodList.addEventListener("click", (e) => {
+  productList.addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
-      let id = parseInt(e.target.dataset.id);
-      const product = products.find((prod) => prod.id === id);
-      addToCart(product);
+      const productId = parseInt(e.target.dataset.id);
+      addToCart(productId);
     }
   });
-  function addToCart(prod) {
-    cart.push(prod);
+
+  function addToCart(id) {
+    const item = products.find((product) => product.id === id);
+    cart.push(item);
     renderCart();
   }
+
   function renderCart() {
+    cartItems.innerText = "";
     let totalPrice = 0;
-    if (cart.length) {
-      cartItem.innerHTML = "";
-      emptyCartMsg.classList.add("hidden");
-      cardTotoal.classList.remove("hidden");
-
+    if (cart.length > 0) {
+      cartTotal.classList.remove("hidden");
       cart.forEach((item, index) => {
-        totalPrice += item.price;
-        const newItem = document.createElement("p");
-        newItem.innerHTML = `${item.name} - $${item.price.toFixed(2)}`;
-        cartItem.appendChild(newItem);
+        const { id, name, price } = item;
+        const newItem = document.createElement("div");
+        newItem.innerHTML = `<span>${name} - $${price}</span> <button data-id="${id}">Remove</button>`;
+        newItem.classList.add("product");
+        cartItems.appendChild(newItem);
+        totalPrice += price;
       });
-      cardTotoalPrice.textContent = `$${totalPrice.toFixed(2)}`;
+      totalPriceDiv.innerHTML = `$${totalPrice.toFixed(2)}`;
     } else {
-      emptyCartMsg.classList.remove("hidden");
-      cardTotoalPrice.textContent = `$0.00`;
+      emptyCartMsg.classList.add("hidden");
+      cartTotal.classList.add("hidden");
     }
   }
 
-  document.querySelector("#checkout-btn").addEventListener("click", () => {
-    cart.length = 0;
-    alert("Checkout Successfully!");
-    renderCart();
+  cartItems.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") {
+      const productId = parseInt(e.target.dataset.id);
+      removeCartItem(productId);
+    }
   });
+
+  function removeCartItem(id) {
+    const itemIndex = cart.findIndex((item) => item.id === id);
+    cart.splice(itemIndex, 1);
+    renderCart();
+  }
 });
