@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: 4, name: "product 4", price: 31.432 },
   ];
 
-  const cart = [];
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   // render products
   products.forEach((prodcut) => {
@@ -35,9 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const item = products.find((product) => product.id === id);
     cart.push(item);
     renderCart();
+    saveToLocal(cart);
   }
 
-  function renderCart() {
+  const renderCart = () => {
     let totalPrice = 0;
     cartItems.innerHTML = "";
     if (cart.length > 0) {
@@ -59,7 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
       totalPriceDiv.innerHTML = `$0.00`;
       cartTotal.classList.add("hidden");
     }
-  }
+  };
+  renderCart();
 
   cartItems.addEventListener("click", (e) => {
     if (e.target.tagName === "BUTTON") {
@@ -72,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const itemIndex = cart.findIndex((item) => item.id === id);
     cart.splice(itemIndex, 1);
     renderCart();
+    saveToLocal(cart);
   }
 
   checkoutBtn.addEventListener("click", () => {
@@ -79,4 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
     cart.length = 0;
     renderCart();
   });
+
+  function saveToLocal(arr) {
+    localStorage.setItem("cart", JSON.stringify(arr));
+  }
 });
