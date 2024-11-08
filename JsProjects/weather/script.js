@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cityName = document.querySelector("#city-name");
   const temp = document.querySelector("#temperature");
   const des = document.querySelector("#description");
+  const weatherIcon = document.querySelector("#weather-icon");
 
   const API_KEY = "9fbe05a99573c194a385102e8990e676";
 
@@ -38,6 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ((weatherData.main.temp - 32) * 5) / 9
     )} &deg;C</h3>`;
     des.textContent = weatherData.weather[0].description;
+
+    const iconCode = weatherData.weather[0].icon;
+    const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+    weatherIcon.setAttribute("src", iconUrl);
   }
 
   function showError() {
